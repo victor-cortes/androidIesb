@@ -35,6 +35,7 @@ class CadastrarActivity : AppCompatActivity() {
 
         botaoCadastrar.setOnClickListener{
             cadastraProduto()
+//            finish()
         }
 
         db = Room.databaseBuilder(
@@ -60,7 +61,7 @@ class CadastrarActivity : AppCompatActivity() {
 
     fun cadastraProduto() {
         db?.produtoDao()?.insertProduto(Produto(name = nomeProduto.text.toString(), foto = imageToBitmap(imageView), valor = valorProduto.text.toString().toDouble()))
-        Toast.makeText(this, "Produto Cadastrado com Sucesso", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(this, "Produto Cadastrado com Sucesso", Toast.LENGTH_SHORT).show()
     }
 
     fun alteraProduto(produto: Produto) {

@@ -97,7 +97,8 @@ private class ProdutoListAdapter(context: Context, listProduto: List<Produto>) :
         nametextView.text = mListProduto.get(position).name
 
         val descricaotextView = rowMain.findViewById<TextView>(R.id.textViewDescricao)
-        descricaotextView.text = mListProduto.get(position).valor.toString()
+        val valor = mListProduto.get(position).valor.toString()
+        descricaotextView.text = "R$  $valor"
 
 
         return rowMain

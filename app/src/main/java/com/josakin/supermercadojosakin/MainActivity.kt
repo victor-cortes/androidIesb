@@ -20,6 +20,8 @@ import android.content.Intent
 class MainActivity : AppCompatActivity() {
 
     var db: AppDatabase? = null
+    private var listagemAdapter: ProdutoListAdapter? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +44,8 @@ class MainActivity : AppCompatActivity() {
 
 
         val listView = findViewById<ListView>(R.id.listViewProduto)
-        listView.adapter = ProdutoListAdapter(this, produtos!!)
+        listagemAdapter = ProdutoListAdapter(this, produtos!!)
+        listView.adapter = listagemAdapter
 
 
         val buttonCadastrar = findViewById<Button>(R.id.buttonCadastrar)
@@ -51,6 +54,10 @@ class MainActivity : AppCompatActivity() {
             startActivity(myIntent)
         })
 
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     fun cadastraProduto() {
@@ -64,6 +71,16 @@ class MainActivity : AppCompatActivity() {
     fun excluirProduto(produto: Produto) {
         db?.produtoDao()?.removeProduto(produto)
     }
+
+    override fun onRestart() {
+        super.onRestart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+    }
+
 }
 
 private class ProdutoListAdapter(context: Context, listProduto: List<Produto>) : BaseAdapter() {

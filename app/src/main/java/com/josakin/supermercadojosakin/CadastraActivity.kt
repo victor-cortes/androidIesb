@@ -25,17 +25,16 @@ class CadastrarActivity : AppCompatActivity() {
         setContentView(R.layout.activity_cadastrar)
 
 
-        imageButton.setOnClickListener{
+        imageButton.setOnClickListener {
             val abreCamera = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            if(abreCamera.resolveActivity(packageManager) != null){
+            if (abreCamera.resolveActivity(packageManager) != null) {
                 startActivityForResult(abreCamera, CAMERA_REQUEST_CODE)
             }
         }
 
 
-        botaoCadastrar.setOnClickListener{
+        botaoCadastrar.setOnClickListener {
             cadastraProduto()
-//            finish()
         }
 
         db = Room.databaseBuilder(
@@ -48,20 +47,24 @@ class CadastrarActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        when(requestCode) {
+        when (requestCode) {
             CAMERA_REQUEST_CODE -> {
-                if(resultCode == Activity.RESULT_OK && data != null){
+                if (resultCode == Activity.RESULT_OK && data != null) {
                     imageView.setImageBitmap(data.extras.get("data") as Bitmap)
                 }
-            } else -> {
-            Toast.makeText(this, "Comando não conhecido", Toast.LENGTH_SHORT).show()
-        }
+            }
+            else -> {
+                Toast.makeText(this, "Comando não conhecido", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
     fun cadastraProduto() {
         db?.produtoDao()?.insertProduto(Produto(name = nomeProduto.text.toString(), foto = imageToBitmap(imageView), valor = valorProduto.text.toString().toDouble()))
-//        Toast.makeText(this, "Produto Cadastrado com Sucesso", Toast.LENGTH_SHORT).show()
+
+        Toast.makeText(this, "Produto Cadastrado com Sucesso", Toast.LENGTH_SHORT).show()
+
+        this.finish()
     }
 
     fun alteraProduto(produto: Produto) {

@@ -2,16 +2,20 @@ package com.josakin.supermercadojosakin
 
 import android.arch.persistence.room.Room
 import android.content.Context
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.constraint.ConstraintLayout
+import android.support.v7.app.AppCompatActivity
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.BaseAdapter
+import android.widget.Button
 import android.widget.ListView
+import android.widget.TextView
 import com.josakin.supermercadojosakin.dao.AppDatabase
 import com.josakin.supermercadojosakin.entidades.Produto
+import android.content.Intent
+
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,18 +30,27 @@ class MainActivity : AppCompatActivity() {
                 AppDatabase::class.java, "room-database"
         ).allowMainThreadQueries().build()
 
-        cadastraProduto()
-        cadastraProduto()
+
+        var produtos = db?.produtoDao()?.findAll()
+
+        if(produtos == null || produtos.size <= 0) {
+            cadastraProduto()
+            cadastraProduto()
+
+            produtos = db?.produtoDao()?.findAll()
+        }
 
 
-        val produtos = db?.produtoDao()?.findAll()
+        val listView = findViewById<ListView>(R.id.listViewProduto)
+        listView.adapter = ProdutoListAdapter(this, produtos!!)
 
-        val constraintLayout = findViewById<ConstraintLayout>(R.id.cl)
-        val listView = ListView(this)
-        val adapter = ArrayAdapter<Produto>(this, android.R.layout.simple_list_item_1, produtos)
-        listView.adapter = adapter
 
-        constraintLayout.addView(listView)
+        val buttonCadastrar = findViewById<Button>(R.id.buttonCadastrar)
+        buttonCadastrar.setOnClickListener(View.OnClickListener {
+            val myIntent = Intent(this, CadastrarActivity::class.java)
+            startActivity(myIntent)
+        })
+
     }
 
     fun cadastraProduto() {
@@ -53,24 +66,41 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-class ButtonListAdapter(
-        private val context: Context,
-        private val rowItens: List<Produto>
-) : BaseAdapter() {
-    override fun getItem(p0: Int): Any {
-        return rowItens[p0]
+private class ProdutoListAdapter(context: Context, listProduto: List<Produto>) : BaseAdapter() {
+
+    private val mContext: Context
+    private val mListProduto: List<Produto>
+
+    init {
+        mContext = context
+        mListProduto = listProduto
     }
 
-    override fun getItemId(p0: Int): Long {
-        return rowItens.indexOf(getItemId(p0) as Produto).toLong()
+    override fun getItem(position: Int): Any {
+        return mListProduto.get(position)
+    }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
     }
 
     override fun getCount(): Int {
-        return rowItens.size
+        return mListProduto.size
     }
 
-    override fun getView(p0: Int, p1: View?, p2: ViewGroup?): View {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun getView(position: Int, convertView: View?, viewGroup: ViewGroup?): View {
+        val layoutInflater = LayoutInflater.from(mContext)
+        val rowMain = layoutInflater.inflate(R.layout.row_produto,viewGroup,false)
+
+
+        val nametextView = rowMain.findViewById<TextView>(R.id.textViewName)
+        nametextView.text = mListProduto.get(position).name
+
+        val descricaotextView = rowMain.findViewById<TextView>(R.id.textViewDescricao)
+        descricaotextView.text = mListProduto.get(position).valor.toString()
+
+
+        return rowMain
     }
 
 }

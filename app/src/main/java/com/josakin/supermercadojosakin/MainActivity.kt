@@ -2,19 +2,16 @@ package com.josakin.supermercadojosakin
 
 import android.arch.persistence.room.Room
 import android.content.Context
+import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.Button
-import android.widget.ListView
-import android.widget.TextView
+import android.widget.*
 import com.josakin.supermercadojosakin.dao.AppDatabase
 import com.josakin.supermercadojosakin.entidades.Produto
-import android.content.Intent
-
 
 
 class MainActivity : AppCompatActivity() {
@@ -35,18 +32,14 @@ class MainActivity : AppCompatActivity() {
 
         var produtos = db?.produtoDao()?.findAll()
 
-        if(produtos == null || produtos.size <= 0) {
-            cadastraProduto()
-            cadastraProduto()
-
-            produtos = db?.produtoDao()?.findAll()
-        }
-
-
         val listView = findViewById<ListView>(R.id.listViewProduto)
         listagemAdapter = ProdutoListAdapter(this, produtos!!)
         listView.adapter = listagemAdapter
-
+        listView.onItemClickListener = AdapterView.OnItemClickListener {adapterView, view, position, id ->
+            val myIntent = Intent(this, DetalharActivity::class.java)
+            myIntent.putExtra("itemSelecionado", adapterView.getItemAtPosition(position) as Produto)
+            startActivity(myIntent)
+        }
 
         val buttonCadastrar = findViewById<Button>(R.id.buttonCadastrar)
         buttonCadastrar.setOnClickListener(View.OnClickListener {
@@ -74,19 +67,23 @@ class MainActivity : AppCompatActivity() {
 
     override fun onRestart() {
         super.onRestart()
+        this.listagemAdapter?.notifyDataSetChanged()
     }
 
     override fun onResume() {
         super.onResume()
 
+        this.listagemAdapter?.setMlistProduto(db?.produtoDao()?.findAll()!!)
+        this.listagemAdapter?.notifyDataSetChanged()
+
     }
 
 }
 
-private class ProdutoListAdapter(context: Context, listProduto: List<Produto>) : BaseAdapter() {
+private class ProdutoListAdapter(context: Context, listProduto: List<Produto>) : BaseAdapter()  {
 
     private val mContext: Context
-    private val mListProduto: List<Produto>
+    private var mListProduto: List<Produto>
 
     init {
         mContext = context
@@ -117,8 +114,21 @@ private class ProdutoListAdapter(context: Context, listProduto: List<Produto>) :
         val valor = mListProduto.get(position).valor.toString()
         descricaotextView.text = "R$  $valor"
 
+        val imageViewProduto = rowMain.findViewById<ImageView>(R.id.imageViewProduto)
+
+
+//        var bytes = android.util.Base64.decode(mListProduto.get(position).foto, android.util.Base64.DEFAULT)
+//        imageViewProduto.setImageBitmap(BitmapFactory.decodeByteArray(bytes,0, bytes.size))
+        imageViewProduto.setImageBitmap(mListProduto.get(position).retornaBitMapImage())
 
         return rowMain
+    }
+
+    fun setMlistProduto(produtos : List<Produto>) {
+        this.mListProduto = produtos
+    }
+    fun getMlistProduto() : List<Produto> {
+        return this.mListProduto
     }
 
 }

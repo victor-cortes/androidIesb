@@ -3,9 +3,12 @@ package com.josakin.supermercadojosakin.entidades
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.support.annotation.RequiresApi
 import java.io.File
+import java.io.Serializable
 import java.util.*
 
 /**
@@ -14,10 +17,11 @@ import java.util.*
 
 @Entity(tableName = "produto")
 data class Produto (
+
     @PrimaryKey(autoGenerate = true) var uid: Int = 0,
     @ColumnInfo(name = "name") var name: String = "",
     @ColumnInfo(name = "foto") var foto: String = "",
-    @ColumnInfo(name = "valor") var valor: Double = 0.0) {
+    @ColumnInfo(name = "valor") var valor: Double = 0.0) : Serializable {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun converteToBase64(filePath: String) : String    {
@@ -33,4 +37,9 @@ data class Produto (
         File(pathFile).writeBytes(imageByteArray)
     }
 
+
+    fun retornaBitMapImage() : Bitmap {
+        var bytes = android.util.Base64.decode(foto, android.util.Base64.DEFAULT)
+        return BitmapFactory.decodeByteArray(bytes,0, bytes.size)
+    }
 }

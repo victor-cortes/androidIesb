@@ -5,28 +5,48 @@ import android.arch.persistence.room.Room
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
-import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.support.annotation.RequiresApi
 import android.support.v7.app.AppCompatActivity
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import com.josakin.supermercadojosakin.dao.AppDatabase
 import com.josakin.supermercadojosakin.entidades.Produto
-import kotlinx.android.synthetic.main.activity_cadastrar.*
+import kotlinx.android.synthetic.main.activity_detalhar.*
 import java.io.ByteArrayOutputStream
 
-class CadastrarActivity : AppCompatActivity() {
+class DetalharActivity : AppCompatActivity() {
 
     var db: AppDatabase? = null
+    var produtoSelecionado : Produto? = null
     val CAMERA_REQUEST_CODE = 0
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_cadastrar)
+        setContentView(R.layout.activity_detalhar)
 
+        db = Room.databaseBuilder(
+                applicationContext,
+                AppDatabase::class.java, "room-database"
+        ).allowMainThreadQueries().build()
+
+        produtoSelecionado = intent.extras.get("itemSelecionado") as Produto
+
+
+        val nomeProdutoText = findViewById<EditText>(nomeProduto.id)
+        nomeProdutoText.setText(produtoSelecionado?.name)
+
+        val valorProdutoText = findViewById<EditText>(valorProduto.id)
+        valorProdutoText.setText(produtoSelecionado?.valor.toString())
+
+        val imageView = findViewById<ImageView>(imageView.id)
+        imageView.setImageBitmap(produtoSelecionado?.retornaBitMapImage())
+
+
+        botaoAlterar.setOnClickListener {
+            alterarProduto()
+        }
 
         imageButton.setOnClickListener {
             val abreCamera = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -35,15 +55,6 @@ class CadastrarActivity : AppCompatActivity() {
             }
         }
 
-
-        botaoCadastrar.setOnClickListener {
-            cadastraProduto()
-        }
-
-        db = Room.databaseBuilder(
-                applicationContext,
-                AppDatabase::class.java, "room-database"
-        ).allowMainThreadQueries().build()
 
     }
 
@@ -62,16 +73,19 @@ class CadastrarActivity : AppCompatActivity() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun cadastraProduto() {
-        db?.produtoDao()?.insertProduto(Produto(name = nomeProduto.text.toString(), foto = imageToBase64(imageView), valor = valorProduto.text.toString().toDouble()))
+    private fun alterarProduto() {
+        this.produtoSelecionado?.name = nomeProduto.text.toString()
+        this.produtoSelecionado?.valor = valorProduto.text.toString().toDouble()
+        this.produtoSelecionado?.foto = imageToBase64(imageView)
 
-        Toast.makeText(this, "Produto Cadastrado com Sucesso", Toast.LENGTH_SHORT).show()
+        db?.produtoDao()?.alteraProduto(this.produtoSelecionado!!)
+
+        Toast.makeText(this, "Produto Alterado com Sucesso", Toast.LENGTH_SHORT).show()
 
         this.finish()
+
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun imageToBase64(image: ImageView): String {
         val bitmap = (image.drawable as BitmapDrawable).bitmap
         val stream = ByteArrayOutputStream()
@@ -82,4 +96,6 @@ class CadastrarActivity : AppCompatActivity() {
         bitmap.recycle()
         return base64
     }
+
 }
+

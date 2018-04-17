@@ -22,7 +22,8 @@ class CadastrarActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_cadastrar)
+
 
         imageButton.setOnClickListener{
             val abreCamera = Intent(MediaStore.ACTION_IMAGE_CAPTURE)

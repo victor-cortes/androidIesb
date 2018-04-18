@@ -53,18 +53,6 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    fun cadastraProduto() {
-        db?.produtoDao()?.insertProduto(Produto(name = "S8", foto = "asdas", valor = 3000.0))
-    }
-
-    fun alteraProduto(produto: Produto) {
-        db?.produtoDao()?.alteraProduto(produto)
-    }
-
-    fun excluirProduto(produto: Produto) {
-        db?.produtoDao()?.removeProduto(produto)
-    }
-
     override fun onRestart() {
         super.onRestart()
         this.listagemAdapter?.notifyDataSetChanged()

@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">Super Compras</string>
+    <string name="app_name">Aluno Online</string>
+    <string name="action_settings">Alterar Perfil</string>
+    <string name="sair">Sair</string>
 </resources>

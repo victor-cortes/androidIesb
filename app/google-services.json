@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "932228111035",
+    "firebase_url": "https://projetoandroid-e4164.firebaseio.com",
+    "project_id": "projetoandroid-e4164",
+    "storage_bucket": "projetoandroid-e4164.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:932228111035:android:011682812897e8da",
+        "android_client_info": {
+          "package_name": "mobile.iesb.br.projetofinal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "932228111035-ki72u104a0g206d00mqr8mr8bclkh1td.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "mobile.iesb.br.projetofinal",
+            "certificate_hash": "dcfd844a5b9dde48531c3c470b1a9cc9ea461aef"
+          }
+        },
+        {
+          "client_id": "932228111035-cd0b2klv7qgbichts11l961q2edmiud3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "mobile.iesb.br.projetofinal",
+            "certificate_hash": "5a5d14ddc3a17869d6d514f51dad718cc17354ca"
+          }
+        },
+        {
+          "client_id": "932228111035-nrcfddti33bn5c95stno1ceb5km776s4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMxgncQLkbQL97L8XQEgcNBDI6LAeQWMw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "932228111035-nrcfddti33bn5c95stno1ceb5km776s4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
